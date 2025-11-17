@@ -27,8 +27,3 @@ $controllerName = $controllerAndAction[0];
 $actionName = $controllerAndAction[1];
 $controller = new $controllerName();
 $controller->$actionName(...$matches);
-
-// $author = new \Models\Users\User('Иван');
-// $article = new \Models\Articles\Article('Заголовок', 'Текст', $author);
-// var_dump($article);
- 

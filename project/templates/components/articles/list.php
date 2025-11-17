@@ -4,10 +4,10 @@
         <div class="row align-items-center">
             <div class="col">
                 <h2 class="h3 fw-bold text-dark mb-2">
-                    <?= htmlspecialchars($article['name']) ?>
+                    <a href="/back_end_development/project/articles/<?= $article->getId() ?>"><?= $article->getName() ?>"></a>
                 </h2>
                 <p class="text-muted mb-0">
-                    <?= htmlspecialchars($article['text']) ?>
+                    <?= $article->getText() ?>
                 </p>
             </div>
             <div class="col-auto">
