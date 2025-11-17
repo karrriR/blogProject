@@ -1,7 +1,6 @@
 <?php
 
 namespace Models\Articles;
-use Models\Users\User;
 class Article
 {
     private $id;
@@ -29,6 +28,11 @@ class Article
     public function getText(): string
     {
         return $this->text;
+    }
+
+    public function getAuthorId(): int
+    {
+        return $this->authorId;
     }
 
     private function underscoreToCamelCase(string $source): string

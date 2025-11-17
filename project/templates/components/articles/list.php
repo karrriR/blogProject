@@ -4,7 +4,7 @@
         <div class="row align-items-center">
             <div class="col">
                 <h2 class="h3 fw-bold text-dark mb-2">
-                    <a href="/back_end_development/project/articles/<?= $article->getId() ?>"><?= $article->getName() ?>"></a>
+                    <a href="/back_end_development/project/articles/<?= $article->getId()?>" class="text-decoration-none"><?= $article->getName() ?></a>
                 </h2>
                 <p class="text-muted mb-0">
                     <?= $article->getText() ?>
