@@ -9,6 +9,9 @@ class Article
     private $authorId;
     private $createdAt;
 
+
+    // Автоматически вызывается когда пытаются установить свойство, которого нет
+    // Преобразует имя из snake_case в camelCase с помощью метода underscoreToCamelCase()
     public function __set($name, $value)
     {
         $camelCaseName = $this->underscoreToCamelCase($name);
@@ -35,6 +38,9 @@ class Article
         return $this->authorId;
     }
 
+    // ucwords() - делает заглавными буквы после _
+    // str_replace() - убирает все _
+    // lcfirst() - первую букву делает маленькой
     private function underscoreToCamelCase(string $source): string
     {
         return lcfirst(str_replace('_', '', ucwords($source, '_')));

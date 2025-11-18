@@ -2,11 +2,13 @@
 
 namespace Services;
 
+// класс для работы с базой данных
 class Db
 {
     /** @var \PDO */
     private $pdo;
 
+    // Читает настройки БД из файла, подключается к MySQL, устанавливает кодировку UTF-8
     public function __construct()
     {
         $dbOptions = (require dirname(__DIR__) . '/settings.php');
@@ -18,6 +20,7 @@ class Db
         $this->pdo->exec('SET NAMES UTF8');
     }
 
+     // Подготавливает SQL запрос, выполняет с параметрами, преобразует результат в объекты указанного класса
     public function query(string $sql, array $params = [], string $className = 'stdClass'): ?array
     {
         $sth = $this->pdo->prepare($sql);

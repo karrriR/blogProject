@@ -11,22 +11,29 @@ class MainController
     private $view;
     private $db;
 
+    // Инициализирует шаблонизатор и подключение к базе данных
     public function __construct()
     {
         $this->view = new View(dirname(dirname(__DIR__)) . '/templates');
         $this->db = new Db();
     }
 
+    // Обрабатывает главную страницу сайта
+    // Получает все статьи из базы данных и передает их в шаблон
     public function main()
     {
+        // Получаем все статьи из базы данных, преобразуя их в объекты Article
         $articles = $this->db->query('SELECT * FROM `articles`;', [], Article::class);
 
+        // Отображаем шаблон главной страницы, передавая массив статей
         $this->view->renderHtml('main/main.php', [
             'articles' => $articles
         ]);
     }
 
-    // public function sayHello(string $name)
+}
+
+// public function sayHello(string $name)
     // {
     //     $this->view->renderHtml('main/hello.php', [
     //         'name' => $name,
@@ -40,4 +47,3 @@ class MainController
     //         'title' => 'Страница прощания'
     //     ]);
     // }
-}
