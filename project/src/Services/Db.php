@@ -5,11 +5,13 @@ namespace Services;
 // класс для работы с базой данных
 class Db
 {
+    private static $instance;
+
     /** @var \PDO */
     private $pdo;
 
     // Читает настройки БД из файла, подключается к MySQL, устанавливает кодировку UTF-8
-    public function __construct()
+    private function __construct()
     {
         $dbOptions = (require dirname(__DIR__) . '/settings.php');
         $this->pdo = new \PDO(
@@ -29,5 +31,14 @@ class Db
             return null;
         }
         return $sth->fetchAll(\PDO::FETCH_CLASS, $className);
+    }
+
+    public static function getInstance(): self
+    {
+        if (self::$instance === null) {
+            self::$instance = new self();
+        }
+
+        return self::$instance;
     }
 }

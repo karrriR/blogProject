@@ -1,26 +1,30 @@
 <?php
 
 namespace Models\Articles;
-class Article
+
+use Models\ActiveRecordEntity;
+use Models\Users\User;
+
+class Article extends ActiveRecordEntity
 {
-    private $id;
-    private $name;
-    private $text;
-    private $authorId;
-    private $createdAt;
+    protected $name;
+    protected $text;
+    protected $authorId;
+    protected $createdAt;
 
-
-    // Автоматически вызывается когда пытаются установить свойство, которого нет
-    // Преобразует имя из snake_case в camelCase с помощью метода underscoreToCamelCase()
-    public function __set($name, $value)
+    public function setName(string $name)
     {
-        $camelCaseName = $this->underscoreToCamelCase($name);
-        $this->$camelCaseName = $value;
+        $this->name = $name;
     }
 
-     public function getId(): int
+    public function setText(string $text)
     {
-        return $this->id;
+        $this->text = $text;
+    }
+
+    public function setAuthor(User $author): void
+    {
+        $this->authorId = $author->getId();
     }
 
     public function getName(): string
@@ -33,16 +37,13 @@ class Article
         return $this->text;
     }
 
-    public function getAuthorId(): int
+    public function getAuthorId(): User
     {
-        return $this->authorId;
+        return User::getById($this->authorId);
     }
 
-    // ucwords() - делает заглавными буквы после _
-    // str_replace() - убирает все _
-    // lcfirst() - первую букву делает маленькой
-    private function underscoreToCamelCase(string $source): string
+    protected static function getTableName(): string
     {
-        return lcfirst(str_replace('_', '', ucwords($source, '_')));
+        return 'articles';
     }
 }

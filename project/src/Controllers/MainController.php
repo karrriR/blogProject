@@ -15,16 +15,15 @@ class MainController
     public function __construct()
     {
         $this->view = new View(dirname(dirname(__DIR__)) . '/templates');
-        $this->db = new Db();
+        $this->db = Db::getInstance();
     }
 
     // Обрабатывает главную страницу сайта
     // Получает все статьи из базы данных и передает их в шаблон
     public function main()
     {
-        // Получаем все статьи из базы данных, преобразуя их в объекты Article
-        $articles = $this->db->query('SELECT * FROM `articles`;', [], Article::class);
-
+        $articles = Article::findAll();
+        
         // Отображаем шаблон главной страницы, передавая массив статей
         $this->view->renderHtml('main/main.php', [
             'articles' => $articles

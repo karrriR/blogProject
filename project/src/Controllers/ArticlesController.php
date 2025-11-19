@@ -1,9 +1,9 @@
 <?php
 
 namespace Controllers;
+
 use Models\Articles\Article;
 use Models\Users\User;
-use Services\Db;
 use Views\View;
 
 class ArticlesController
@@ -11,48 +11,67 @@ class ArticlesController
     /** @var View */
     private $view;
 
-    /** @var Db */
-    private $db;
-
-    // Инициализирует шаблонизатор и подключение к базе данных
+    // Инициализирует шаблонизатор
     public function __construct()
     {
         $this->view = new View(dirname(dirname(__DIR__)) . '/templates');
-        $this->db = new Db();
     }
 
     // Отображает страницу просмотра конкретной статьи
     public function view(int $articleId)
     {
-        // Получаем статью из базы данных по её ID
-        $result = $this->db->query(
-            'SELECT * FROM `articles` WHERE id = :id;',
-            [':id' => $articleId],
-            Article::class
-        );
+        $article = Article::getById($articleId);
 
          // Если статья не найдена, показывается страница 404
-        if ($result === []) {
+        if ($article === null) {
             $this->view->renderHtml('errors/404.php', [], 404);
             return;
         }
 
-         // Извлекаем статью из результата запроса
-        $article = $result[0];
-
-        // Получаем автора статьи по его ID из таблицы пользователей
-        $authorResult = $this->db->query(
-            'SELECT u.* FROM `users` u WHERE u.id = :author_id;',
-            [':author_id' => $article->getAuthorId()],
-            User::class
-        );
-
-        $author = !empty($authorResult) ? $authorResult[0] : null;
-
-        // Отображаем шаблон страницы статьи, передавая статью и данные автора
+        // Отображаем шаблон страницы статьи, передавая статью
         $this->view->renderHtml('components/articles/view.php', [
             'article' => $article,
-            'author' => $author
         ]);
+    }
+
+    public function edit(int $articleId): void
+    {
+        /** @var Article|null $article */
+
+        $article = Article::getById($articleId);
+
+        if ($article === null) {
+            $this->view->renderHtml('errors/404.php', [], 404);
+            return;
+        }
+
+        $article->setName('Новое название статьи');
+        $article->setText('Новый текст статьи');
+        $article->save();
+
+    }
+
+    public function add(): void
+    {
+        $author = User::getById(1);
+        $article = new Article();
+        $article->setAuthor($author);
+        $article->setName('Новое название статьи');
+        $article->setText('Новый текст статьи');
+
+        $article->save();
+
+        var_dump($article);
+    }
+
+    public function delete(int $articleId): void
+    {
+         $article = Article::getById($articleId);
+
+        if ($article === null) {
+            $this->view->renderHtml('errors/404.php', [], 404);
+            return;
+        }
+         $article->delete();
     }
 }
