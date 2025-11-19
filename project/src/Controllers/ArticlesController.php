@@ -29,7 +29,7 @@ class ArticlesController
         }
 
         // Отображаем шаблон страницы статьи, передавая статью
-        $this->view->renderHtml('components/articles/view.php', [
+        $this->view->renderHtml('articles/view.php', [
             'article' => $article,
         ]);
     }
@@ -45,9 +45,19 @@ class ArticlesController
             return;
         }
 
-        $article->setName('Новое название статьи');
-        $article->setText('Новый текст статьи');
-        $article->save();
+        if (!empty($_POST)) {
+            $article->setName($_POST['name']);
+            $article->setText($_POST['text']);
+            $article->save();
+
+            // Перенаправляем на страницу статьи после сохранения
+            header('Location: /back_end_development/project/articles/' . $article->getId());
+            exit;
+        }
+
+        $this->view->renderHtml('articles/edit.php', [
+            'article' => $article
+        ]);
 
     }
 

@@ -12,7 +12,7 @@
             </div>
             <div class="col-auto">
                 <span class="badge bg-primary rounded-pill px-3 py-2">
-                    Новое
+                    <?= $article->getCreatedAtFormatted() ?>
                 </span>
             </div>
         </div>

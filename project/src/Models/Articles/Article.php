@@ -31,6 +31,11 @@ class Article extends ActiveRecordEntity
     {
         return $this->name;
     }
+    
+    public function getCreatedAtFormatted(): string
+    {
+        return date('d.m.Y H:i', strtotime($this->createdAt));
+    }
 
     public function getText(): string
     {
