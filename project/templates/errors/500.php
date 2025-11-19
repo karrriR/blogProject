@@ -9,10 +9,10 @@
 <body class="bg-light">
     <div class="container min-vh-100 d-flex align-items-center justify-content-center">
         <div class="text-center">
-            <h1 class="display-1 fw-bold text-secondary">404</h1>
-            <h2 class="h3 text-dark mb-4">Страница не найдена</h2>
+            <h1 class="display-1 fw-bold text-secondary">500</h1>
+            <h2 class="h3 text-dark mb-4">Хьюстон, у нас проблема!</h2>
             <p class="text-muted mb-4">
-                Запрашиваемая страница не существует.
+                <?= $error ?>
             </p>
             <div class="d-flex gap-3 justify-content-center">
                 <a href="/back_end_development/project/www" class="btn btn-primary">

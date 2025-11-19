@@ -4,18 +4,10 @@ namespace Controllers;
 
 use Models\Articles\Article;
 use Models\Users\User;
-use Views\View;
+use Exceptions\NotFoundException;
 
-class ArticlesController
+class ArticlesController extends AbstractController
 {
-    /** @var View */
-    private $view;
-
-    // Инициализирует шаблонизатор
-    public function __construct()
-    {
-        $this->view = new View(dirname(dirname(__DIR__)) . '/templates');
-    }
 
     // Отображает страницу просмотра конкретной статьи
     public function view(int $articleId)
@@ -24,8 +16,7 @@ class ArticlesController
 
          // Если статья не найдена, показывается страница 404
         if ($article === null) {
-            $this->view->renderHtml('errors/404.php', [], 404);
-            return;
+            throw new NotFoundException();
         }
 
         // Отображаем шаблон страницы статьи, передавая статью
@@ -41,8 +32,7 @@ class ArticlesController
         $article = Article::getById($articleId);
 
         if ($article === null) {
-            $this->view->renderHtml('errors/404.php', [], 404);
-            return;
+            throw new NotFoundException();
         }
 
         if (!empty($_POST)) {
@@ -79,8 +69,7 @@ class ArticlesController
          $article = Article::getById($articleId);
 
         if ($article === null) {
-            $this->view->renderHtml('errors/404.php', [], 404);
-            return;
+            throw new NotFoundException();
         }
          $article->delete();
     }

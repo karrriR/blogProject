@@ -6,10 +6,17 @@ namespace Views;
 class View
 {
     private $templatesPath;
+    private $extraVars = [];
 
     public function __construct(string $templatesPath)
     {
         $this->templatesPath = $templatesPath;
+    }
+
+    // Добавляет глобальные переменные, которые будут доступны во всех шаблонах
+    public function setVar(string $name, $value): void
+    {
+        $this->extraVars[$name] = $value;
     }
 
     // Метод рендоринга страницы HTML, принимает в качестве параметров (Имя файла шаблона, массив с данными для шаблона, статус HTTP)
@@ -17,7 +24,7 @@ class View
     {
         // http_response_code - устанавливает HTTP-код
         http_response_code($code);
-        $title = $vars['title'] ?? 'Мой блог';
+        extract($this->extraVars);
 
         // extract() - превращает ключи массива в переменные
         extract($vars);

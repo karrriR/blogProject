@@ -7,12 +7,17 @@ use Services\Db;
 abstract class ActiveRecordEntity
 
 {
+    /**
+     * @return static|null
+     */
     protected $id;
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
+
+    // Для поиска в таблице по ID
     public static function getById(int $id): ?self
     {
         $db = Db::getInstance();
@@ -40,12 +45,22 @@ abstract class ActiveRecordEntity
         return lcfirst(str_replace('_', '', ucwords($source, '_')));
     }
 
+    // Преобразует строку из camelCase в snake_case
+    // preg_replace() - выполняет поиск и замену по регулярному выражению
+    //  strtolower() - приводит всю строку к нижнему регистру
+    private function camelCaseToUnderscore(string $source): string
+    {
+        return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $source));
+    }
+
+    // Получить все записи таблицы
     public static function findAll(): array
     {
         $db = Db::getInstance();
         return $db->query('SELECT * FROM `' . static::getTableName() . '`;', [], static::class);
     }
 
+    // Автоматически преобразует свойства объекта в массив для работы с базой данных
     private function mapPropertiesToDbFormat(): array
     {
         $reflector = new \ReflectionObject($this);
@@ -61,13 +76,10 @@ abstract class ActiveRecordEntity
         return $mappedProperties;
     }
 
-        private function camelCaseToUnderscore(string $source): string
-    {
-        return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $source));
-    }
-
     abstract protected static function getTableName(): string;
 
+
+    // Сохранение данных / либо метод добавления либо изменение
     public function save(): void
     {
         $mappedProperties = $this->mapPropertiesToDbFormat();
@@ -78,6 +90,8 @@ abstract class ActiveRecordEntity
         }
     }
 
+
+    // Изменение в таблице
     private function update(array $mappedProperties): void
     {
         $columns2params = [];
@@ -96,6 +110,8 @@ abstract class ActiveRecordEntity
         $db->query($sql, $params2values, static::class);
     }
 
+
+    // Добавление в таблицу
     private function insert(array $mappedProperties): void
     {
         $filteredProperties = array_filter($mappedProperties);
@@ -118,6 +134,7 @@ abstract class ActiveRecordEntity
         $db->query($sql, $params2values, static::class);
     }
 
+    // Удаление по id 
     public function delete(): void
     {
         $db = Db::getInstance();
@@ -126,5 +143,21 @@ abstract class ActiveRecordEntity
             [':id' => $this->id]
         );
         $this->id = null;
+    }
+
+    // Найти по произвольному столбцу
+    public static function findOneByColumn(string $columnName, $value): ?self
+    {
+        $db = Db::getInstance();
+        $result = $db->query(
+            'SELECT * FROM `' . static::getTableName() . '` WHERE `' . $columnName . '` = :value LIMIT 1;',
+            [':value' => $value],
+            static::class
+        );
+        if ($result === []) {
+            return null;
+        }
+        return $result[0];
+
     }
 }
