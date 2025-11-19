@@ -19,7 +19,7 @@
 
   <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
     <li><a href="#" class="nav-link px-2 link-secondary">Статьи</a></li>
-    <li><a href="#" class="nav-link px-2">О блоге</a></li>
+    <li><a href="/back_end_development/project/www/aboutus" class="nav-link px-2">О блоге</a></li>
     <li><a href="#" class="nav-link px-2">FAQ</a></li>
   </ul>
 
@@ -30,6 +30,7 @@
                 <i class="bi bi-person-circle me-1"></i> <?= $user->getNickname() ?>
             </span>
             <a href="/back_end_development/project/users/logout" class="btn btn-outline-secondary btn-sm">Выйти</a>
+            <a href="/back_end_development/project/articles/add" class="btn btn-outline-secondary btn-sm ms-2">➕ Добавить статью</a>
         </div>
         <?php else: ?>
         <div class="d-flex gap-2 justify-content-end">

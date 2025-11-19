@@ -5,6 +5,7 @@ namespace Controllers;
 use Models\Articles\Article;
 use Models\Users\User;
 use Exceptions\NotFoundException;
+use Models\Comments\Comment;
 
 class ArticlesController extends AbstractController
 {
@@ -19,9 +20,12 @@ class ArticlesController extends AbstractController
             throw new NotFoundException();
         }
 
+        $comments = Comment::findAllByColumn('article_id', $articleId);
+
         // Отображаем шаблон страницы статьи, передавая статью
         $this->view->renderHtml('articles/view.php', [
             'article' => $article,
+            'comments' => $comments
         ]);
     }
 
@@ -53,24 +57,50 @@ class ArticlesController extends AbstractController
 
     public function add(): void
     {
-        $author = User::getById(1);
-        $article = new Article();
-        $article->setAuthor($author);
-        $article->setName('Новое название статьи');
-        $article->setText('Новый текст статьи');
+        if ($this->user === null) {
+        header('Location: /back_end_development/project/users/login');
+        exit;
+        }
 
-        $article->save();
+        if ($_POST) {
+            $name = trim($_POST['name'] ?? '');
+            $text = trim($_POST['text'] ?? '');
 
-        var_dump($article);
+            if (empty($name) || empty($text)) {
+                $this->view->renderHtml('articles/add.php', [
+                    'error' => 'Все поля обязательны для заполнения'
+                ]);
+                return;
+            }
+            
+            // Создаем статью с текущим пользователем как автором
+            $article = new Article();
+            $article->setAuthor($this->user); 
+            $article->setName($name);
+            $article->setText($text);
+            $article->save();
+            
+            header('Location: /back_end_development/project/www');
+            exit;
+        }
+        
+        $this->view->renderHtml('articles/add.php');
     }
 
     public function delete(int $articleId): void
     {
-         $article = Article::getById($articleId);
+        /** @var \Models\Articles\Article|null $article */
+        $article = Article::getById($articleId);
 
         if ($article === null) {
             throw new NotFoundException();
         }
-         $article->delete();
+        if ($this->user === null || !$article->canDelete($this->user)) {
+            throw new NotFoundException();
+        }
+
+        $article->delete();
+        header('Location: /back_end_development/project/www');
+        exit;
     }
 }

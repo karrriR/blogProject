@@ -5,6 +5,7 @@ namespace Models\Users;
 
 use Models\ActiveRecordEntity;
 use Exceptions\InvalidArgumentException;
+use Models\Articles\Article;
 
 class User extends ActiveRecordEntity
 {
@@ -34,6 +35,16 @@ class User extends ActiveRecordEntity
     protected static function getTableName(): string
     {
         return 'users';
+    }
+
+     public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    public function isAuthorOf(Article $article): bool
+    {
+        return $this->getId() === $article->getAuthorId()->getId();
     }
 
 
@@ -122,12 +133,12 @@ class User extends ActiveRecordEntity
     }
 
     public static function getByAuthToken(): ?User
-{
-    $token = $_COOKIE['authToken'] ?? '';
-    if (empty($token)) {
-        return null;
+    {
+        $token = $_COOKIE['authToken'] ?? '';
+        if (empty($token)) {
+            return null;
+        }
+        
+        return static::findOneByColumn('authToken', $token);
     }
-    
-    return static::findOneByColumn('authToken', $token);
-}
 }

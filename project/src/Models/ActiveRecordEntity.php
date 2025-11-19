@@ -160,4 +160,14 @@ abstract class ActiveRecordEntity
         return $result[0];
 
     }
+
+    public static function findAllByColumn(string $columnName, $value): array
+    {
+        $db = Db::getInstance();
+        return $db->query(
+            'SELECT * FROM `' . static::getTableName() . '` WHERE `' . $columnName . '` = :value ORDER BY created_at DESC;',
+            [':value' => $value],
+            static::class
+        );
+    }
 }

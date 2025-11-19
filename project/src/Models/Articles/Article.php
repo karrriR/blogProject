@@ -51,4 +51,14 @@ class Article extends ActiveRecordEntity
     {
         return 'articles';
     }
+
+    public function canEdit(User $user): bool
+    {
+        return $user->isAuthorOf($this) || $user->isAdmin();
+    }
+
+    public function canDelete(User $user): bool
+    {
+        return $user->isAuthorOf($this) || $user->isAdmin();
+    }
 }
