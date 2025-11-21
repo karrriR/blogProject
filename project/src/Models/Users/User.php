@@ -101,8 +101,6 @@ class User extends ActiveRecordEntity
         
         $user = User::findOneByColumn('email', $loginData['email']);
 
-        // var_dump($user);
-
         if ($user === null) {
             throw new InvalidArgumentException('Нет пользователя с таким email');
         }
@@ -130,15 +128,5 @@ class User extends ActiveRecordEntity
     public function refreshAuthToken()
     {
         $this->authToken = sha1(random_bytes(100)) . sha1(random_bytes(100));
-    }
-
-    public static function getByAuthToken(): ?User
-    {
-        $token = $_COOKIE['authToken'] ?? '';
-        if (empty($token)) {
-            return null;
-        }
-        
-        return static::findOneByColumn('authToken', $token);
     }
 }

@@ -1,4 +1,4 @@
-# Включает механизм перезаписи URL
+# Включает механизм перезаписи для ЧПУ (человеко-понятных URL)
 RewriteEngine On
 
 RewriteCond %{SCRIPT_FILENAME} !-d

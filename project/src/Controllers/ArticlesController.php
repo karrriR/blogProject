@@ -29,6 +29,8 @@ class ArticlesController extends AbstractController
         ]);
     }
 
+
+    // Изменение статьи 
     public function edit(int $articleId): void
     {
         /** @var Article|null $article */
@@ -55,6 +57,7 @@ class ArticlesController extends AbstractController
 
     }
 
+    // Добавление статьи
     public function add(): void
     {
         if ($this->user === null) {
@@ -87,6 +90,7 @@ class ArticlesController extends AbstractController
         $this->view->renderHtml('articles/add.php');
     }
 
+    // Удаление статьи
     public function delete(int $articleId): void
     {
         /** @var \Models\Articles\Article|null $article */

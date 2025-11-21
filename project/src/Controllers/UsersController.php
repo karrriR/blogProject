@@ -52,7 +52,7 @@ class UsersController extends AbstractController
         
         // Удаляем cookie с токеном
         setcookie('authToken', '', [
-            'expires' => time() - 3600, // В прошлом - cookie удалится
+            'expires' => time() - 3600,
             'path' => '/',
             'secure' => false,
             'httponly' => true,

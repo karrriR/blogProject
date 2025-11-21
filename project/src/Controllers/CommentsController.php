@@ -64,7 +64,7 @@ class CommentsController extends AbstractController
         exit;
     }
 
-    // Форма редактирования комментария
+    // Редактирование комментария
     public function edit(int $commentId): void
     {
         /** @var \Models\Comments\Comment|null $comment */
@@ -94,6 +94,8 @@ class CommentsController extends AbstractController
             'comment' => $comment
         ]);
     }
+
+    // Удаление комментария
     public function delete(int $commentId): void
     {
         /** @var \Models\Comments\Comment|null $comment */
@@ -103,7 +105,7 @@ class CommentsController extends AbstractController
             throw new NotFoundException();
         }
 
-        // Проверяем права: автор комментария ИЛИ админ
+        // Проверяем права: автор комментария или админ
         if ($this->user === null || 
             ($comment->getAuthorId()->getId() !== $this->user->getId() && !$this->user->isAdmin())) {
             throw new NotFoundException();

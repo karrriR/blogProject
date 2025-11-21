@@ -1,4 +1,5 @@
 <?php
+// Основная модель реализующая паттерн Active Record для всех моделей
 
 namespace Models;
 
@@ -145,7 +146,7 @@ abstract class ActiveRecordEntity
         $this->id = null;
     }
 
-    // Найти по произвольному столбцу
+    // Найти по произвольному столбцу 1 запись
     public static function findOneByColumn(string $columnName, $value): ?self
     {
         $db = Db::getInstance();
@@ -161,6 +162,7 @@ abstract class ActiveRecordEntity
 
     }
 
+    // Найти по произвольному столбцу все записи
     public static function findAllByColumn(string $columnName, $value): array
     {
         $db = Db::getInstance();

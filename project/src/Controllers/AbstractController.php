@@ -1,4 +1,5 @@
 <?php
+// Основной контроллер от которого все наследуются
 
 namespace Controllers;
 
@@ -16,6 +17,7 @@ abstract class AbstractController
     /** @var User|null */
     protected $user;
 
+    // При создании любого контроллера автоматически проверяется авторизация и передается пользователь в шаблоны
     public function __construct()
     {
         $this->user = UsersAuthService::getUserByToken();

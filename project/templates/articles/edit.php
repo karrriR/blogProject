@@ -17,21 +17,12 @@
                         <form method="post">
                             <div class="mb-3">
                                 <label for="name" class="form-label">Название статьи</label>
-                                <input type="text" 
-                                       class="form-control" 
-                                       id="name" 
-                                       name="name" 
-                                       value="<?= $article->getName() ?>" 
-                                       required>
+                                <input type="text" class="form-control" id="name" name="name" value="<?= $article->getName() ?>" required>
                             </div>
                             
                             <div class="mb-3">
                                 <label for="text" class="form-label">Текст статьи</label>
-                                <textarea class="form-control" 
-                                          id="text" 
-                                          name="text" 
-                                          rows="10" 
-                                          required><?= $article->getText() ?></textarea>
+                                <textarea class="form-control" id="text" name="text" rows="10" required><?= $article->getText() ?></textarea>
                             </div>
                             
                             <div class="d-flex gap-2">
